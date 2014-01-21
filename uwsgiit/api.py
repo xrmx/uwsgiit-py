@@ -118,7 +118,7 @@ class UwsgiItClient:
         path = self._path_from_resource(resource, 'DELETE')
         return self._delete(path, data)
 
-    # GET wrappers
+    # wrappers!
     def me(self):
         return self.get("me")
 
