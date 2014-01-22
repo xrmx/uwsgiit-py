@@ -19,7 +19,7 @@ setup(
     version=uwsgiit.__version__,
     description='Library for uwsgi.it api',
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
-    url="https://github.com/unbit/uwsgiit-py",
+    url="https://github.com/xrmx/uwsgiit-py",
     license='BSD License',
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
