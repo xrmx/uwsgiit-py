@@ -19,16 +19,16 @@ class ClientTestCase(TestCase):
     """
     def test_me_get(self):
         r = self.client.me()
-        me = r['response'].json()
-        self.assertEqual(r['error'], False)
+        me = r.json()
+        self.assertEqual(r.uerror, False)
 
     def test_me_post_company(self):
         company = "DogeCom"
         r = self.client.update_me({'company': company })
-        self.assertEqual(r['error'], False)
+        self.assertEqual(r.uerror, False)
 
         r = self.client.me()
-        me = r['response'].json()
+        me = r.json()
         self.assertEqual(me['company'], company)
 
     """
@@ -36,39 +36,39 @@ class ClientTestCase(TestCase):
     """
     def test_distros_get(self):
         r = self.client.distros()
-        distros = r['response'].json()
-        self.assertEqual(r['error'], False)
+        distros = r.json()
+        self.assertEqual(r.uerror, False)
 
     """
     Containers: curl https://kratos:deimos@foobar.com/api/me/containers/
     """
     def test_containers_get(self):
         r = self.client.containers()
-        containers = r['response'].json()
-        self.assertEqual(r['error'], False)
+        containers = r.json()
+        self.assertEqual(r.uerror, False)
 
     def test_containers_get_single(self):
         r = self.client.container(self.container)
-        container = r['response'].json()
-        self.assertEqual(r['error'], False)
+        container = r.json()
+        self.assertEqual(r.uerror, False)
 
     def test_containers_set_distro(self):
-        distros = self.client.distros()['response'].json()
+        distros = self.client.distros().json()
         distro = random.choice([d['id'] for d in distros])
         r = self.client.container_set_distro(self.container, distro)
-        self.assertEqual(r['error'], False)
+        self.assertEqual(r.uerror, False)
 
         r = self.client.container(self.container)
-        container = r['response'].json()
+        container = r.json()
         self.assertEqual(container['distro'], distro)
 
     def test_containers_set_keys(self):
         keys = ["ssh-rsa miao"]
         r = self.client.container_set_keys(self.container, keys)
-        self.assertEqual(r['error'], False)
+        self.assertEqual(r.uerror, False)
 
         r = self.client.container(self.container)
-        container = r['response'].json()
+        container = r.json()
         self.assertEqual(container['ssh_keys'], keys)
 
     """
@@ -76,25 +76,25 @@ class ClientTestCase(TestCase):
     """
     def test_domains_get(self):
         r = self.client.domains()
-        domains = r['response'].json()
-        self.assertEqual(r['error'], False)
+        domains = r.json()
+        self.assertEqual(r.uerror, False)
 
     def test_domains_add_delete(self):
         domain = str(uuid.uuid4())
         # add
         r = self.client.add_domain(domain)
         # lame but fails without settings the dns
-        self.assertEqual(r['error'], True)
-        self.assertEqual("FORBIDDEN" in r['message'], True)
+        self.assertEqual(r.uerror, True)
+        self.assertEqual("FORBIDDEN" in r.umessage, True)
 
         # delete
         # lame but delete fails if domain does not exist
         self.client.delete_domain(domain)
-        self.assertEqual(r['error'], True)
-        self.assertEqual("FORBIDDEN" in r['message'], True)
+        self.assertEqual(r.uerror, True)
+        self.assertEqual("FORBIDDEN" in r.umessage, True)
 
         r = self.client.domains()
-        domains = r['response'].json()
+        domains = r.json()
         found = [d for d in domains if d['name'] == domain]
         self.assertEqual(found, [])
 

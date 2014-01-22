@@ -138,6 +138,13 @@ curl -X DELETE -d '{"name":"mynewdomain.org"}' https://kratos:deimos17@foobar.co
 client.delete_domain("mynewdomain.org")
 ```
 
+## Error handling
+
+All the client methods return a [requests'](https://github.com/kennethreitz/requests) Request instance.
+To ease error handling the instance is augmentend with two more attributes:
+* uerror: a boolean that indicate if an HTTP error occured
+* umessage: the error message in plain text
+
 ## Acknowledgements
 
 Mikamai's [ruby client](https://github.com/mikamai/uwsgi_it_client/) used as

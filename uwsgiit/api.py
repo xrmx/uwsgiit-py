@@ -33,21 +33,13 @@ class UwsgiItClient:
     def _parse_response(self, response):
         try:
             response.raise_for_status()
-            error = False
-            error_message = ""
+            response.uerror = False
+            response.umessage = ""
         except requests.exceptions.HTTPError as e:
-            error_message = e.message
-            error = True
-        except ValueError as e:
-            error_message = e.message
-            error = True
+            response.umessage = e.message
+            response.uerror = True
 
-        # FIXME: this is fugly
-        return {
-            'response': response,
-            'error': error,
-            'message': error_message,
-        }
+        return response
 
     def _path_join(self, path_list):
         # there should be only integers and strings
