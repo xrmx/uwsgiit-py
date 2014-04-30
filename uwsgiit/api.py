@@ -7,29 +7,6 @@ class UwsgiItClient:
         self.password = password
         self.url = url
 
-        self.resources = {
-            'me': {
-                'methods': ['GET', 'POST'],
-                'path': 'me',
-            },
-            'distros': {
-                'methods': ['GET'],
-                'path': 'distros',
-            },
-            'containers': {
-                'methods': ['GET', 'POST'],
-                'path': 'containers',
-            },
-            'me/containers': {
-                'methods': ['GET'],
-                'path': 'me/containers',
-            },
-            'domains': {
-                'methods': ['GET', 'POST', 'DELETE'],
-                'path': 'domains',
-            }
-        }
-
     def _parse_response(self, response):
         try:
             response.raise_for_status()
@@ -52,7 +29,11 @@ class UwsgiItClient:
         return '/'.join(path)
 
     def _build_uri(self, path):
-        return self._path_join([self.url, path])
+        if isinstance(path, list):
+            url = [self.url] + path
+        else:
+            url = [self.url, path]
+        return self._path_join(url)
 
     def _get(self, path):
         uri = self._build_uri(path)
@@ -74,48 +55,25 @@ class UwsgiItClient:
         r = requests.delete(uri, data=payload, auth=(self.username, self.password))
         return self._parse_response(r)
 
-    def _path_from_resource(self, resource, method):
-        resource_is_list = isinstance(resource, list)
-        if resource_is_list:
-            r = resource[0]
-        else:
-            r = resource
-        res = self.resources.get(r)
-
-        if not res:
-            raise ValueError("resource does not exist")
-
-        if method not in res['methods']:
-            raise ValueError("method not supported for this resource")
-
-        path = [res['path']]
-        if resource_is_list:
-            path += resource[1:]
-
-        return self._path_join(path)
-
     """
     Public API
     """
     # base methods
     def get(self, resource):
-        path = self._path_from_resource(resource, 'GET')
-        return self._get(path)
+        return self._get(resource)
 
     def post(self, resource, data):
-        path = self._path_from_resource(resource, 'POST')
-        return self._post(path, data)
+        return self._post(resource, data)
 
     def delete(self, resource, data=None):
-        path = self._path_from_resource(resource, 'DELETE')
-        return self._delete(path, data)
+        return self._delete(resource, data)
 
     # wrappers!
     def me(self):
         return self.get("me")
 
     def containers(self):
-        return self.get("me/containers")
+        return self.get("containers")
 
     def container(self, id):
         return self.get(["containers", id])

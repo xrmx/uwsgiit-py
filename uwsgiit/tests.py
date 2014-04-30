@@ -98,22 +98,5 @@ class ClientTestCase(TestCase):
         found = [d for d in domains if d['name'] == domain]
         self.assertEqual(found, [])
 
-    # invalid resource
-    def test_invalid_resource_get(self):
-        self.assertRaises(ValueError, self.client.get, ["doge"])
-
-    def test_invalid_resource_post(self):
-        self.assertRaises(ValueError, self.client.post, None, {"resource": "doge", "data": {}})
-
-    def test_invalid_resource_delete(self):
-        self.assertRaises(ValueError, self.client.delete, ["doge"])
-
-    # invalid methods
-    def test_invalid_post(self):
-        self.assertRaises(ValueError, self.client.post, None, {"resource": "distros", "data":{}})
-
-    def test_invalid_delete(self):
-        self.assertRaises(ValueError, self.client.delete, ["distros"])
-
 if __name__ == '__main__':
     unittest.main()
