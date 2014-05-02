@@ -92,6 +92,9 @@ class UwsgiItClient:
             params = None
         return self.get("domains", params)
 
+    def domain(self, id):
+        return self.get(["domains", id])
+
     def update_me(self, data):
         return self.post("me", data)
 

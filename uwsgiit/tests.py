@@ -79,6 +79,10 @@ class ClientTestCase(TestCase):
         domains = r.json()
         self.assertEqual(r.uerror, False)
 
+    def tests_domains_get_single(self):
+        r = self.client.domain(100)
+        self.assertEqual(r.status_code, 404)
+
     def test_domains_add_delete(self):
         domain = str(uuid.uuid4())
         # add
