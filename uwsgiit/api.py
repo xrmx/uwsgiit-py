@@ -113,6 +113,9 @@ class UwsgiItClient:
     def container_set_keys(self, container, keys):
         return self.update_container(container, {'ssh_keys': keys })
 
+    def reboot_container(self, container):
+        return self.post(["containers", container], {'reboot': 1})
+
     def create_tag(self, name):
         return self.post("tags", {"name": name})
 

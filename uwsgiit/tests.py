@@ -120,5 +120,12 @@ class ClientTestCase(TestCase):
         containers = r.json()
         self.assertEqual(r.uerror, False)
 
+    """
+    Reboot: curl -X POST -d '{"reboot":1}' https://kratos:deimos17@foobar.com/api/containers/30009
+    """
+    def test_reboot(self):
+        r = self.client.reboot_container(self.container)
+        self.assertEqual(r.uerror, False)
+
 if __name__ == '__main__':
     unittest.main()
