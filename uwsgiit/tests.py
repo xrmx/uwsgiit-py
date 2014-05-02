@@ -98,5 +98,27 @@ class ClientTestCase(TestCase):
         found = [d for d in domains if d['name'] == domain]
         self.assertEqual(found, [])
 
+    """
+    Tags: curl https://kratos:deimos@foobar.com/api/tags/
+    """
+    def test_tag_creation_delete(self):
+        r = self.client.create_tag("mytag")
+        tag_id = r.json()["id"]
+        r = self.client.delete_tag(tag_id)
+        r = self.client.list_tags()
+        tags = r.json()
+        found_tag = [t for t in tags if t['id'] == tag_id]
+        self.assertEqual(found_tag, [])
+
+    def test_tag_domain_filter(self):
+        r = self.client.domains(tags=["ciao"])
+        domains = r.json()
+        self.assertEqual(r.uerror, False)
+
+    def test_tag_container_filter(self):
+        r = self.client.containers(tags=["ciao"])
+        containers = r.json()
+        self.assertEqual(r.uerror, False)
+
 if __name__ == '__main__':
     unittest.main()

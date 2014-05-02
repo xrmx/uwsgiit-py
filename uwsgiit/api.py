@@ -35,9 +35,9 @@ class UwsgiItClient:
             url = [self.url, path]
         return self._path_join(url)
 
-    def _get(self, path):
+    def _get(self, path, params=None):
         uri = self._build_uri(path)
-        r = requests.get(uri, auth=(self.username, self.password))
+        r = requests.get(uri, auth=(self.username, self.password), params=params)
         return self._parse_response(r)
 
     def _post(self, path, data):
@@ -59,8 +59,8 @@ class UwsgiItClient:
     Public API
     """
     # base methods
-    def get(self, resource):
-        return self._get(resource)
+    def get(self, resource, params=None):
+        return self._get(resource, params)
 
     def post(self, resource, data):
         return self._post(resource, data)
@@ -72,8 +72,12 @@ class UwsgiItClient:
     def me(self):
         return self.get("me")
 
-    def containers(self):
-        return self.get("containers")
+    def containers(self, tags=None):
+        if tags:
+            params = { "tags": ",".join(tags)}
+        else:
+            params = None
+        return self.get("containers", params)
 
     def container(self, id):
         return self.get(["containers", id])
@@ -81,8 +85,12 @@ class UwsgiItClient:
     def distros(self):
         return self.get("distros")
 
-    def domains(self):
-        return self.get("domains")
+    def domains(self, tags=None):
+        if tags:
+            params = { "tags": ",".join(tags)}
+        else:
+            params = None
+        return self.get("domains", params)
 
     def update_me(self, data):
         return self.post("me", data)
@@ -93,6 +101,9 @@ class UwsgiItClient:
     def delete_domain(self, domain):
         return self.delete("domains", {'name': domain })
 
+    def update_domain(self, domain, data):
+        return self.post(["domains", domain], data)
+
     def update_container(self, container, data):
         return self.post(["containers", container], data)
 
@@ -101,3 +112,12 @@ class UwsgiItClient:
 
     def container_set_keys(self, container, keys):
         return self.update_container(container, {'ssh_keys': keys })
+
+    def create_tag(self, name):
+        return self.post("tags", {"name": name})
+
+    def delete_tag(self, tag_id):
+        return self.delete(["tags", tag_id])
+
+    def list_tags(self):
+        return self.get("tags")
