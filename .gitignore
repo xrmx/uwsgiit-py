@@ -35,4 +35,7 @@ nosetests.xml
 .project
 .pydevproject
 
+# PyCharm
+.idea
+
 examples
