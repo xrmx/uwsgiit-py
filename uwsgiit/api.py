@@ -74,7 +74,7 @@ class UwsgiItClient:
 
     def containers(self, tags=None):
         if tags:
-            params = { "tags": ",".join(tags)}
+            params = {"tags": ",".join(tags)}
         else:
             params = None
         return self.get("containers", params)
@@ -87,7 +87,7 @@ class UwsgiItClient:
 
     def domains(self, tags=None):
         if tags:
-            params = { "tags": ",".join(tags)}
+            params = {"tags": ",".join(tags)}
         else:
             params = None
         return self.get("domains", params)
@@ -99,10 +99,10 @@ class UwsgiItClient:
         return self.post("me", data)
 
     def add_domain(self, domain):
-        return self.post("domains", {'name': domain })
+        return self.post("domains", {'name': domain})
 
     def delete_domain(self, domain):
-        return self.delete("domains", {'name': domain })
+        return self.delete("domains", {'name': domain})
 
     def update_domain(self, domain, data):
         return self.post(["domains", domain], data)
@@ -111,10 +111,10 @@ class UwsgiItClient:
         return self.post(["containers", container], data)
 
     def container_set_distro(self, container, distro):
-        return self.update_container(container, {'distro': distro })
+        return self.update_container(container, {'distro': distro})
 
     def container_set_keys(self, container, keys):
-        return self.update_container(container, {'ssh_keys': keys })
+        return self.update_container(container, {'ssh_keys': keys})
 
     def reboot_container(self, container):
         return self.post(["containers", container], {'reboot': 1})
