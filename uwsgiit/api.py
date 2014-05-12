@@ -1,7 +1,7 @@
 import requests
 import json
 
-class UwsgiItClient:
+class UwsgiItClient(object):
     def __init__(self, username, password, url):
         self.username = username
         self.password = password
