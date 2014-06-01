@@ -1,11 +1,15 @@
 from unittest import TestCase
 from uwsgiit.api import UwsgiItClient as UClient
-import os, random, uuid
+import os
+import random
+import uuid
+
 
 class ClientTestCase(TestCase):
     """
     https://github.com/unbit/uwsgi.it/blob/master/CustomerQuickstart.md
     """
+
     def setUp(self):
         username = os.environ['UWSGI_IT_USERNAME']
         password = os.environ['UWSGI_IT_PASSWORD']
@@ -17,6 +21,7 @@ class ClientTestCase(TestCase):
     """
     Account Info: curl https://kratos:deimos@foobar.com/api/me/
     """
+
     def test_me_get(self):
         r = self.client.me()
         me = r.json()
@@ -24,7 +29,7 @@ class ClientTestCase(TestCase):
 
     def test_me_post_company(self):
         company = "DogeCom"
-        r = self.client.update_me({'company': company })
+        r = self.client.update_me({'company': company})
         self.assertEqual(r.uerror, False)
 
         r = self.client.me()
@@ -34,6 +39,7 @@ class ClientTestCase(TestCase):
     """
     Distributions: curl https://kratos:deimos17@foobar.com/api/distros/
     """
+
     def test_distros_get(self):
         r = self.client.distros()
         distros = r.json()
@@ -42,6 +48,7 @@ class ClientTestCase(TestCase):
     """
     Containers: curl https://kratos:deimos@foobar.com/api/me/containers/
     """
+
     def test_containers_get(self):
         r = self.client.containers()
         containers = r.json()
@@ -74,6 +81,7 @@ class ClientTestCase(TestCase):
     """
     Domains: curl https://kratos:deimos@foobar.com/api/domains/
     """
+
     def test_domains_get(self):
         r = self.client.domains()
         domains = r.json()
@@ -105,6 +113,7 @@ class ClientTestCase(TestCase):
     """
     Tags: curl https://kratos:deimos@foobar.com/api/tags/
     """
+
     def test_tag_creation_delete(self):
         r = self.client.create_tag("mytag")
         tag_id = r.json()["id"]
@@ -127,9 +136,11 @@ class ClientTestCase(TestCase):
     """
     Reboot: curl -X POST -d '{"reboot":1}' https://kratos:deimos17@foobar.com/api/containers/30009
     """
+
     def test_reboot(self):
         r = self.client.reboot_container(self.container)
         self.assertEqual(r.uerror, False)
+
 
 if __name__ == '__main__':
     unittest.main()
