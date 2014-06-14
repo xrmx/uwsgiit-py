@@ -127,3 +127,9 @@ class UwsgiItClient(object):
 
     def list_tags(self):
         return self.get("tags")
+
+    def container_metric(self, container, metric, params=None):
+        return self.get(['metrics', 'container.{}'.format(metric), container], params)
+
+    def domain_metric(self, domain, metric, params=None):
+        return self.get(['metrics', 'domain.{}'.format(metric), domain], params)

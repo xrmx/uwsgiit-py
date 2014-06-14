@@ -141,6 +141,20 @@ class ClientTestCase(TestCase):
         r = self.client.reboot_container(self.container)
         self.assertEqual(r.uerror, False)
 
+    """
+    Metrics: curl https://kratos:deimos@foobar.com/api/metrics/container.io.read/
+             curl https://kratos:deimos@foobar.com/api/metrics/domain.net.rx/
+    """
+
+    def test_container_metric(self):
+        r = self.client.container_metric(self.container, "io.read")
+        self.assertEqual(r.uerror, False)
+
+    def test_domain_metric(self):
+        r = self.client.domains()
+        domain = r.json()[0]['id']
+        r = self.client.domain_metric(domain, "net.rx")
+        self.assertEqual(r.uerror, False)
 
 if __name__ == '__main__':
     unittest.main()
