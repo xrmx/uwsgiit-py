@@ -1,6 +1,7 @@
 import requests
 import json
 
+
 class UwsgiItClient(object):
     def __init__(self, username, password, url):
         self.username = username
@@ -69,6 +70,9 @@ class UwsgiItClient(object):
         return self._delete(resource, data)
 
     # wrappers!
+    def news(self):
+        return self.get("news")
+
     def me(self):
         return self.get("me")
 

@@ -1,11 +1,12 @@
-from unittest import TestCase
-from uwsgiit.api import UwsgiItClient as UClient
+import unittest
 import os
 import random
 import uuid
 
+from uwsgiit.api import UwsgiItClient as UClient
 
-class ClientTestCase(TestCase):
+
+class ClientTestCase(unittest.TestCase):
     """
     https://github.com/unbit/uwsgi.it/blob/master/CustomerQuickstart.md
     """
@@ -17,6 +18,20 @@ class ClientTestCase(TestCase):
         self.client = UClient(username, password, url)
 
         self.container = os.environ['UWSGI_IT_CONTAINER']
+
+    """
+    News: curl https://kratos:deimos@foobar.com/api/news/
+    """
+    def test_news_get(self):
+        r = self.client.news()
+        news = r.json()
+        self.assertEqual(r.uerror, False)
+
+    def test_news_get_without_credentials(self):
+        client = UClient(None, None, os.environ['UWSGI_IT_URL'])
+        r = client.news()
+        news = r.json()
+        self.assertEqual(r.uerror, False)
 
     """
     Account Info: curl https://kratos:deimos@foobar.com/api/me/
