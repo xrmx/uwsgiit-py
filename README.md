@@ -17,6 +17,17 @@ from uwsgiit.api import UwsgiItClient
 client = UwsgiItClient("kratos", "deimos", "https://foobar.com/api")
 ```
 
+#### Get latest news
+
+```bash
+# Plain Usage
+curl https://kratos:deimos@foobar.com/api/news/
+```
+
+```python
+client.news()
+```
+
 #### List your data
 
 ```bash
