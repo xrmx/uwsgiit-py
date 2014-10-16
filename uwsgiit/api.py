@@ -137,3 +137,23 @@ class UwsgiItClient(object):
 
     def domain_metric(self, domain, metric, params=None):
         return self.get(['metrics', 'domain.{}'.format(metric), domain], params)
+
+    def loopboxes(self, container=None, tags=None):
+        params = {}
+        if tags:
+            params['tags'] = ','.join(tags)
+        if container:
+            params['container'] = container
+        return self.get('loopboxes', params)
+
+    def loopbox(self, id):
+        return self.get(['loopboxes', id])
+
+    def create_loopbox(self, container, filename, mountpoint, readonly=False):
+        return self.post('loopboxes', {'container': container, 'filename': filename, 'mountpoint': mountpoint, 'ro': readonly})
+
+    def update_loopbox(self, id, data):
+        return self.post(['loopboxes', id], data)
+
+    def delete_loopbox(self, id):
+        return self.delete(['loopboxes', id])

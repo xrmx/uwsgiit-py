@@ -18,6 +18,7 @@ class ClientTestCase(unittest.TestCase):
         self.client = UClient(username, password, url)
 
         self.container = os.environ['UWSGI_IT_CONTAINER']
+        self.loopbox = os.environ['UWSGI_IT_LOOPBOX']
 
     """
     News: curl https://kratos:deimos@foobar.com/api/news/
@@ -170,6 +171,33 @@ class ClientTestCase(unittest.TestCase):
         domain = r.json()[0]['id']
         r = self.client.domain_metric(domain, "net.rx")
         self.assertEqual(r.uerror, False)
+
+    """
+    Loopboxes: curl https://kratos:deimos@foobar.com/api/loopboxes/
+    """
+    def test_loopboxes(self):
+        r = self.client.loopboxes()
+        loopboxes = r.json()
+        self.assertEqual(r.uerror, False)
+
+    def test_loopboxes_creation_delete(self):
+        r = self.client.create_loopbox(self.container, 'myloopbox', 'myloop')
+        created_message = r.json()['message']
+        self.assertEqual(created_message, 'Created')
+
+        r = self.client.loopboxes()
+        loopboxes = r.json()
+        loopbox_id = [x['id'] for x in loopboxes if x['container'] == int(self.container) and x['filename'] == 'myloopbox' and x['mountpoint'] == 'myloop'][0]
+
+        r = self.client.delete_loopbox(loopbox_id)
+        deleted_message = r.json()['message']
+        self.assertEqual(deleted_message, 'Ok')
+
+    def test_loopbox(self):
+        r = self.client.loopbox(self.loopbox)
+        loopbox = r.json()
+        self.assertEqual(r.uerror, False)
+
 
 if __name__ == '__main__':
     unittest.main()
