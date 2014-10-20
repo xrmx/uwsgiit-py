@@ -14,7 +14,7 @@ class UwsgiItClient(object):
             response.uerror = False
             response.umessage = ""
         except requests.exceptions.HTTPError as e:
-            response.umessage = e.message
+            response.umessage = str(e)
             response.uerror = True
 
         return response
