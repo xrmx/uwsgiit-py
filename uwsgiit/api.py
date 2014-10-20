@@ -1,6 +1,12 @@
 import requests
 import json
 
+class UwsgiItAlarmLevel:
+    SYSTEM    = 0
+    USER      = 1
+    EXCEPTION = 2
+    TRACEBACK = 3
+    LOG       = 4
 
 class UwsgiItClient(object):
     def __init__(self, username, password, url):
@@ -157,3 +163,18 @@ class UwsgiItClient(object):
 
     def delete_loopbox(self, id):
         return self.delete(['loopboxes', id])
+
+    def alarms(self, params=None):
+        return self.get('alarms', params)
+
+    def alarm(self, id):
+        return self.get(['alarms', id])
+
+    def create_alarm(self, container, message, params=None):
+        return self.post(['alarms', 'raise', container], message, params)
+
+    def create_alarm_key(self, container):
+        return self.get(['alarm_key', container])
+
+    def delete_alarm(self, id):
+        return self.delete(['alarms', id])

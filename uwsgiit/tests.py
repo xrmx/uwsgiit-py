@@ -19,6 +19,7 @@ class ClientTestCase(unittest.TestCase):
 
         self.container = os.environ['UWSGI_IT_CONTAINER']
         self.loopbox = os.environ['UWSGI_IT_LOOPBOX']
+        self.alarm = os.environ['UWSGI_IT_ALARM']
 
     """
     News: curl https://kratos:deimos@foobar.com/api/news/
@@ -198,6 +199,40 @@ class ClientTestCase(unittest.TestCase):
         loopbox = r.json()
         self.assertEqual(r.uerror, False)
 
+    """
+    Alarms: curl https://kratos:deimos@foobar.com/api/alarms/
+    """
+    def test_alarms_get(self):
+        r = self.client.alarms()
+        alarms = r.json()
+        self.assertEqual(r.uerror, False)
+
+    def test_alarms_creation_delete(self):
+        params = {
+            'class': 'my-uwsgiit-py-testclass'
+        }
+        r = self.client.create_alarm(self.container, 'myalarm', params)
+        created_message = r.json()['message']
+        self.assertEqual(created_message, 'Created')
+
+        r = self.client.alarms(params)
+        alarms = r.json()
+        self.assertEqual(len(alarms), 1)
+        alarm_id = alarms[0]['id']
+
+        r = self.client.delete_alarm(alarm_id)
+        deleted_message = r.json()['message']
+        self.assertEqual(deleted_message, 'Ok')
+
+    def test_alarm(self):
+        r = self.client.alarm(self.alarm)
+        alarm = r.json()
+        self.assertEqual(r.uerror, False)
+
+    def test_create_alarm_key(self):
+        r = self.client.create_alarm_key(self.container)
+        key = r.json()
+        self.assertEqual(r.uerror, False)
 
 if __name__ == '__main__':
     unittest.main()
