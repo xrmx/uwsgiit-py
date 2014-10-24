@@ -41,10 +41,10 @@ class UwsgiItClient(object):
         r = requests.get(uri, auth=(self.username, self.password), params=params)
         return self._parse_response(r)
 
-    def _post(self, path, data):
+    def _post(self, path, data, params):
         uri = self._build_uri(path)
         payload = json.dumps(data)
-        r = requests.post(uri, data=payload, auth=(self.username, self.password))
+        r = requests.post(uri, data=payload, params=params, auth=(self.username, self.password))
         return self._parse_response(r)
 
     def _delete(self, path, data=None):
@@ -63,8 +63,8 @@ class UwsgiItClient(object):
     def get(self, resource, params=None):
         return self._get(resource, params)
 
-    def post(self, resource, data):
-        return self._post(resource, data)
+    def post(self, resource, data, params=None):
+        return self._post(resource, data, params)
 
     def delete(self, resource, data=None):
         return self._delete(resource, data)
