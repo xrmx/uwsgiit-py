@@ -14,7 +14,7 @@ CLASSIFIERS = [
 
 setup(
     author="Riccardo Magliocchetti",
-    author_email="riccardo@unbit.it",
+    author_email="riccardo.magliocchetti@gmail.com",
     name='uwsgiit-py',
     version=uwsgiit.__version__,
     description='Library for uwsgi.it api',
