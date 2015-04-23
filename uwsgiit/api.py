@@ -62,6 +62,12 @@ class UwsgiItClient(object):
         r = requests.delete(uri, data=payload, auth=(self.username, self.password))
         return self._parse_response(r)
 
+    def _check_params(self, params, whitelist):
+        if params:
+            wrong_params = [p for p in params if p not in whitelist]
+            if wrong_params:
+                raise KeyError("Invalid params: {0}".format(", ".join(wrong_params)))
+
     """
     Public API
     """
@@ -165,12 +171,22 @@ class UwsgiItClient(object):
         return self.delete(['loopboxes', id])
 
     def alarms(self, params=None):
+        ALLOWED_PARAMS = (
+            'container', 'class', 'color', 'vassal', 'level',
+            'line', 'filename', 'func', 'with_total', 'range'
+        )
+        self._check_params(params, ALLOWED_PARAMS)
         return self.get('alarms', params)
 
     def alarm(self, id):
         return self.get(['alarms', id])
 
     def create_alarm(self, container, message, params=None):
+        ALLOWED_PARAMS = (
+            'class', 'color', 'vassal', 'level',
+            'line', 'filename', 'func', 'unix'
+        )
+        self._check_params(params, ALLOWED_PARAMS)
         return self.post(['alarms', 'raise', container], message, params)
 
     def create_alarm_key(self, container):

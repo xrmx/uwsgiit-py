@@ -229,10 +229,16 @@ class ClientTestCase(unittest.TestCase):
         alarm = r.json()
         self.assertEqual(r.uerror, False)
 
+    def test_alarms_invalid_key(self):
+        self.assertRaises(KeyError, self.client.alarms, {'foo': 'bar'})
+
     def test_create_alarm_key(self):
         r = self.client.create_alarm_key(self.container)
         key = r.json()
         self.assertEqual(r.uerror, False)
+
+    def test_create_alarm_invalid_key(self):
+        self.assertRaises(KeyError, self.client.create_alarm, self.container, 'hi there', {'foo': 'bar'})
 
 if __name__ == '__main__':
     unittest.main()
