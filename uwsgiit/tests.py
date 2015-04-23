@@ -12,14 +12,14 @@ class ClientTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        username = os.environ['UWSGI_IT_USERNAME']
-        password = os.environ['UWSGI_IT_PASSWORD']
-        url = os.environ['UWSGI_IT_URL']
-        self.client = UClient(username, password, url)
+        username = os.environ.get('UWSGI_IT_USERNAME', 'cicciopasticcio')
+        password = os.environ.get('UWSGI_IT_PASSWORD', 'cicciopasticcio')
+        self.url = os.environ.get('UWSGI_IT_URL', 'http://127.0.0.1:8000/api')
+        self.client = UClient(username, password, self.url)
 
-        self.container = os.environ['UWSGI_IT_CONTAINER']
-        self.loopbox = os.environ['UWSGI_IT_LOOPBOX']
-        self.alarm = os.environ['UWSGI_IT_ALARM']
+        self.container = os.environ.get('UWSGI_IT_CONTAINER', '30001')
+        self.loopbox = os.environ.get('UWSGI_IT_LOOPBOX', '1')
+        self.alarm = os.environ.get('UWSGI_IT_ALARM', '1')
 
     """
     News: curl https://kratos:deimos@foobar.com/api/news/
@@ -30,7 +30,7 @@ class ClientTestCase(unittest.TestCase):
         self.assertEqual(r.uerror, False)
 
     def test_news_get_without_credentials(self):
-        client = UClient(None, None, os.environ['UWSGI_IT_URL'])
+        client = UClient(None, None, self.url)
         r = client.news()
         news = r.json()
         self.assertEqual(r.uerror, False)

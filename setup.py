@@ -26,7 +26,7 @@ setup(
     install_requires=[
         'requests>=2',
     ],
-    packages=find_packages(exclude=["example", "example.*"]),
+    packages=find_packages(exclude=["test_project", "example.*"]),
     include_package_data=True,
     zip_safe = False,
 )
