@@ -26,6 +26,7 @@ setup(
     install_requires=[
         'requests>=2',
     ],
+    test_suite='uwsgiit.tests',
     packages=find_packages(exclude=["test_project", "example.*"]),
     include_package_data=True,
     zip_safe = False,
